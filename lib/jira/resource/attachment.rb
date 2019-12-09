@@ -24,8 +24,8 @@ module JIRA
         data = { 'file' => UploadIO.new(attrs['file'], 'application/binary', attrs['file']) }
 
         request = Net::HTTP::Post::Multipart.new url, data, headers
-        request.basic_auth(client.request_client.options[:username],
-                           client.request_client.options[:password])
+        # request.basic_auth(client.request_client.options[:username],
+                           # client.request_client.options[:password])
 
         response = client.request_client.basic_auth_http_conn.request(request)
 
