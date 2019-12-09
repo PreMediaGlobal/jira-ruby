@@ -24,8 +24,12 @@ module JIRA
         data = { 'file' => UploadIO.new(attrs['file'], 'application/binary', attrs['file']) }
 
         request = Net::HTTP::Post::Multipart.new url, data, headers
-        # request.basic_auth(client.request_client.options[:username],
-                           # client.request_client.options[:password])
+        # we're authenticating here with cookies because basic auth with username/password is not supported anymore
+        # possibly this should be using api key authentication instead...
+        # ... if I ever had one
+        cookie_array = Array(client.request_client.options[:additional_cookies])
+        request.add_field('Cookie', cookie_array.join('; ')) if cookie_array.any?
+        request.basic_auth(client.request_client.options[:username], client.request_client.options[:password])
 
         response = client.request_client.basic_auth_http_conn.request(request)
 
